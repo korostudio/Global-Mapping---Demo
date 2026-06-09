@@ -5,9 +5,36 @@ import Link from "next/link";
 import Container from "./Container";
 import content from "@/lib/content";
 
+const SERVICE_ITEMS = content.services.items;
+
+function ServicesDropdown() {
+  return (
+    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-2 z-50">
+      <div className="bg-white border border-[#E5E7EB] shadow-xl rounded-[6px] py-2 w-[270px]">
+        {SERVICE_ITEMS.map((s) => (
+          <Link
+            key={s.title}
+            href="/servicios"
+            className="flex items-center gap-3 px-4 py-3 hover:bg-[#F4F6F8] group transition-colors"
+          >
+            <span className="text-[20px] text-[#00a9c2] flex-shrink-0 w-7 text-center leading-none">
+              {s.icon}
+            </span>
+            <span className="font-condensed text-[13px] font-bold uppercase tracking-[0.06em] text-[#0D2137] group-hover:text-[#00a9c2] transition-colors leading-tight">
+              {s.title}
+            </span>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 10);
@@ -32,16 +59,41 @@ export default function Navbar() {
             />
           </Link>
 
+          {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-7 flex-1 justify-center">
-            {content.nav.map((l) => (
-              <Link
-                key={l.href}
-                href={l.href}
-                className="font-condensed text-[15px] font-semibold tracking-[0.1em] uppercase text-[#6B7280] hover:text-[#0D2137] transition-colors whitespace-nowrap"
-              >
-                {l.label}
-              </Link>
-            ))}
+            {content.nav.map((l) => {
+              if (l.label === "Servicios") {
+                return (
+                  <div
+                    key={l.href}
+                    className="relative py-2 -my-2"
+                    onMouseEnter={() => setServicesOpen(true)}
+                    onMouseLeave={() => setServicesOpen(false)}
+                  >
+                    <button className={`font-condensed text-[15px] font-semibold tracking-[0.1em] uppercase transition-colors whitespace-nowrap flex items-center gap-1 ${servicesOpen ? "text-[#0D2137]" : "text-[#6B7280] hover:text-[#0D2137]"}`}>
+                      {l.label}
+                      <svg
+                        width="11" height="11" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" strokeWidth={2.5}
+                        className={`transition-transform duration-200 ${servicesOpen ? "rotate-180" : ""}`}
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+                      </svg>
+                    </button>
+                    {servicesOpen && <ServicesDropdown />}
+                  </div>
+                );
+              }
+              return (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  className="font-condensed text-[15px] font-semibold tracking-[0.1em] uppercase text-[#6B7280] hover:text-[#0D2137] transition-colors whitespace-nowrap"
+                >
+                  {l.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Desktop: Search + CTA */}
@@ -55,6 +107,7 @@ export default function Navbar() {
             </Link>
           </div>
 
+          {/* Mobile hamburger */}
           <button
             className="lg:hidden p-2 text-[#6B7280] ml-auto"
             onClick={() => setOpen(!open)}
@@ -69,10 +122,12 @@ export default function Navbar() {
         </div>
       </Container>
 
+      {/* Mobile menu */}
       {open && (
-        <div id="mobile-menu" className="lg:hidden border-t border-[#E5E7EB] bg-white">
+        <div className="lg:hidden border-t border-[#E5E7EB] bg-white">
           <Container>
             <div className="flex flex-col py-4">
+
               {/* Mobile search */}
               <div className="relative mb-3">
                 <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-[#6B7280]" width="15" height="15" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
@@ -85,16 +140,58 @@ export default function Navbar() {
                 />
               </div>
 
-              {content.nav.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="font-condensed text-[12px] font-semibold tracking-[0.1em] uppercase text-[#6B7280] hover:text-[#0D2137] py-3 border-b border-[#F4F6F8] transition-colors"
-                >
-                  {l.label}
-                </Link>
-              ))}
+              {content.nav.map((l) => {
+                if (l.label === "Servicios") {
+                  return (
+                    <div key={l.href}>
+                      <button
+                        onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                        className="w-full flex items-center justify-between font-condensed text-[12px] font-semibold tracking-[0.1em] uppercase text-[#6B7280] hover:text-[#0D2137] py-3 border-b border-[#F4F6F8] transition-colors"
+                      >
+                        {l.label}
+                        <svg
+                          width="12" height="12" viewBox="0 0 24 24" fill="none"
+                          stroke="currentColor" strokeWidth={2.5}
+                          className={`transition-transform duration-200 ${mobileServicesOpen ? "rotate-180" : ""}`}
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 9l6 6 6-6" />
+                        </svg>
+                      </button>
+
+                      {mobileServicesOpen && (
+                        <div className="bg-[#F4F6F8] rounded-[4px] my-1 overflow-hidden">
+                          {SERVICE_ITEMS.map((s) => (
+                            <Link
+                              key={s.title}
+                              href="/servicios"
+                              onClick={() => { setOpen(false); setMobileServicesOpen(false); }}
+                              className="flex items-center gap-3 px-4 py-3 border-b border-[#E5E7EB] last:border-0 hover:bg-[#E0F6FA] transition-colors group"
+                            >
+                              <span className="text-[16px] text-[#00a9c2] flex-shrink-0 w-6 text-center leading-none">
+                                {s.icon}
+                              </span>
+                              <span className="font-condensed text-[11px] font-bold uppercase tracking-[0.06em] text-[#374151] group-hover:text-[#0D2137] transition-colors">
+                                {s.title}
+                              </span>
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+                return (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    className="font-condensed text-[12px] font-semibold tracking-[0.1em] uppercase text-[#6B7280] hover:text-[#0D2137] py-3 border-b border-[#F4F6F8] transition-colors"
+                  >
+                    {l.label}
+                  </Link>
+                );
+              })}
+
               <Link
                 href="/contacto"
                 onClick={() => setOpen(false)}
