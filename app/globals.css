@@ -1,0 +1,209 @@
+@import "tailwindcss";
+
+@theme {
+  --spacing:          0.25rem;
+  --color-navy:       #0D2137;
+  --color-navy-dark:  #071828;
+  --color-navy-mid:   #152d48;
+  --color-teal:       #00a9c2;
+  --color-teal-dark:  #007F94;
+  --color-teal-light: #E0F6FA;
+  --color-gm-gray:    #a09e9c;
+  --color-surface:    #F4F6F8;
+  --color-border:     #E5E7EB;
+  --color-body:       #374151;
+  --color-muted:      #6B7280;
+  --font-condensed:   var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
+  --font-body:        var(--font-barlow), 'Barlow', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: #ffffff;
+  color: #374151;
+  overflow-x: hidden;
+  font-size: 14px;
+}
+
+/* ── Hero decorations ───────────────────────────────────────── */
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image:
+    linear-gradient(#fff 1px, transparent 1px),
+    linear-gradient(90deg, #fff 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.hero-accent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
+  background: #00a9c2;
+  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0 100%);
+  opacity: 0.08;
+}
+
+/* ── Section eyebrow label ──────────────────────────────────── */
+.section-label {
+  font-family: var(--font-condensed);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #00a9c2;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+@media (min-width: 640px) {
+  .section-label { font-size: 17px; }
+}
+.section-label::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 2px;
+  background: #00a9c2;
+  flex-shrink: 0;
+}
+
+/* ── Service card — animated bottom bar ─────────────────────── */
+.service-card {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+.service-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: #00a9c2;
+  transform: scaleX(0);
+  transition: transform 0.3s;
+  transform-origin: left;
+}
+.service-card:hover { background: #F4F6F8; }
+.service-card:hover::after { transform: scaleX(1); }
+
+/* ── Sector card — image background + gradient + teal hover ─── */
+.sector-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* Image layer — zooms on hover */
+.sector-img {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.55s ease;
+}
+.sector-card:hover .sector-img {
+  transform: scale(1.07);
+}
+
+/* Permanent dark gradient from bottom so text is always readable */
+.sector-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(13, 33, 55, 0.92) 0%,
+    rgba(13, 33, 55, 0.40) 55%,
+    transparent 100%
+  );
+}
+
+/* Teal overlay on hover */
+.sector-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #00a9c2;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.sector-card:hover .sector-overlay { opacity: 0.60; }
+
+/* Text always on top of all layers */
+.sector-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+  padding: 14px;
+}
+@media (min-width: 640px) {
+  .sector-content { padding: 24px; }
+}
+
+.sector-card .sector-tag {
+  transition: color 0.25s;
+}
+.sector-card:hover .sector-tag { color: rgba(255, 255, 255, 0.90); }
+
+/* ── Client logo marquee ────────────────────────────────────── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+.marquee-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.marquee-wrapper::before,
+.marquee-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 60px;
+  z-index: 2;
+  pointer-events: none;
+}
+@media (min-width: 640px) {
+  .marquee-wrapper::before,
+  .marquee-wrapper::after {
+    width: 120px;
+  }
+}
+.marquee-wrapper::before {
+  left: 0;
+  background: linear-gradient(to right, #ffffff, transparent);
+}
+.marquee-wrapper::after {
+  right: 0;
+  background: linear-gradient(to left, #ffffff, transparent);
+}
+
+.marquee-track {
+  animation: marquee 30s linear infinite;
+}
+.marquee-wrapper:hover .marquee-track {
+  animation-play-state: paused;
+}
+.logo-cell img {
+  filter: grayscale(100%);
+  opacity: 0.45;
+  transition: filter 0.35s ease, opacity 0.35s ease, transform 0.35s ease;
+}
+.logo-cell:hover img {
+  filter: grayscale(0%);
+  opacity: 1;
+  transform: scale(1.08);
+}

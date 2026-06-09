@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "PowerShell(Get-Command ngrok -ErrorAction SilentlyContinue)",
+      "PowerShell(npm list -g localtunnel 2>$null)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "Bash(cat \"/mnt/c/Users/Agustin/AppData/Local/ngrok/ngrok.yml\" 2>/dev/null || echo \"NO CONFIG\")",
+      "Read(//mnt/c/Users/Agustin/AppData/Local/ngrok/**)",
+      "PowerShell(Start-Process -FilePath \"cmd.exe\" -ArgumentList \"/c\", \"cd `\"C:\\\\Users\\\\Agustin\\\\Documents\\\\global-mapping`\" && pnpm dev\" -WindowStyle Hidden)",
+      "PowerShell($job = Start-Job -ScriptBlock { cd \"C:\\\\Users\\\\Agustin\\\\Documents\\\\global-mapping\"; npx localtunnel --port 3000 2>&1 }; Start-Sleep -Seconds 8; Receive-Job $job)",
+      "PowerShell($job = Start-Job -ScriptBlock { npx localtunnel --port 3000 }; Start-Sleep -Seconds 10; $out = Receive-Job $job; Write-Host \"Output: $out\"; $job | Stop-Job)",
+      "Read(//mnt/c/Users/Agustin/Documents/**)",
+      "Bash(timeout 15 npx localtunnel --port 3000)",
+      "Bash(jobs -l)"
+    ]
+  }
+}
