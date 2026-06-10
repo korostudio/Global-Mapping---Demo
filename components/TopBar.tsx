@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Container from "./Container";
 
 const SOCIAL = [
@@ -57,16 +56,7 @@ export default function TopBar() {
             ))}
           </div>
 
-          {/* Admin link */}
-          <Link href="/admin" className="flex items-center gap-2 group">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="text-white group-hover:text-white/70 transition-colors">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            <span className="font-condensed text-[11px] font-semibold tracking-[0.14em] uppercase text-white group-hover:text-white/70 transition-colors whitespace-nowrap">
-              Área restringida
-            </span>
-          </Link>
+          {/* Admin link — hidden for client demo */}
 
         </div>
       </Container>
